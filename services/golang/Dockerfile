@@ -4,6 +4,16 @@ LABEL maintainer="kyle <skywalkerwei@gmail.com>"
 
 ENV GOPROXY https://goproxy.cn,direct
 
+
+run apt-get update && \
+    apt-get upgrade -y && \
+#git
+    apt-get install git 
+# supervisor
+RUN apt-get install supervisor -y \
+	&& rm -rf /var/cache/apk/*
+
+
 # 安装必要的软件包和依赖包
 # USER root
 # RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list && \
@@ -34,6 +44,7 @@ ENV GOPROXY https://goproxy.cn,direct
 
 # # $GOPATH/bin添加到环境变量中
 # ENV PATH $GOPATH/bin:$PATH
+
 
 # # 清理垃圾
 # USER root

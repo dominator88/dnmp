@@ -75,36 +75,11 @@ services:
       - ${PHP7_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf:rw
       - ${PHP7_LOG_DIR}:/var/log/php
       - ${DATA_DIR}/composer:/tmp/composer
-    ports:
-      - "${PHP7_SOCKETS_PORT}:8620"
-      - "${PHP7_SOCKETS_REGISTER_PORT}:8610"  
-      - "1236:1236"
     restart: always
     cap_add:
       - SYS_PTRACE
     networks:
       - default
-
-  golang:                                # 自定义容器名称
-    build:
-      context: ./services/golang                  # 指定构建使用的 Dockerfile 文件
-    container_name: golang
-    environment:                         # 设置环境变量
-      - TZ=${TZ}
-    volumes:                             # 设置挂载目录
-      - ${SOURCE_DIR}:/usr/src/code     # 引用 .env 配置中 SOURCE_DIR 变量，将宿主机上代码存放的目录挂载到容器中 /usr/src/code 目录
-    ports:                               # 设置端口映射
-      - "8080:8080"
-      - "8081:8081"
-      - "50100:50100"
-      - "50000:50000"
-      - "50200:50200"
-      - "4150:4150"
-    stdin_open: true                     # 打开标准输入，可以接受外部输入
-    tty: true
-    networks:
-      - default
-    restart: always                      # 指定容器退出后的重启策略为始终重启    
 
   mysql:
     image: mysql:${MYSQL_VERSION}
@@ -136,23 +111,6 @@ services:
       TZ: "$TZ"
     networks:
       - default
-
-  mongodb:
-    image: mongo:${MONGODB_VERSION}
-    container_name: mongodb
-    environment:
-        MONGO_INITDB_ROOT_USERNAME: "${MONGODB_INITDB_ROOT_USERNAME}"
-        MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_INITDB_ROOT_PASSWORD}"
-        TZ: "$TZ"
-    volumes:
-      - ${DATA_DIR}/mongo:/data/db:rw
-      - ${DATA_DIR}/mongo_key:/mongo:rw
-    ports:
-        - "${MONGODB_HOST_PORT}:28018"
-    networks:
-        - default
-    command:
-        --auth  
 
 
         
